@@ -3,6 +3,7 @@ package DateTime::Event::Holiday::US;
 use warnings;
 use strict;
 
+use Carp 'croak';
 use DateTime::Format::ICal;
 use DateTime::Set;
 
@@ -57,7 +58,6 @@ my %holiday = (
   'New Years Day'                   => 'RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=1',             # January 1
   'Martin Luther King, Jr Birthday' => 'RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=15',            # January 15
   'Martin Luther King Day'          => 'RRULE:FREQ=YEARLY;BYMONTH=1;BYDAY=3mo',                # Third Monday in January
-  'Inauguration Day'                => 'RRULE:FREQ=YEARLY;INTERVAL=4;BYMONTH=1,BYMONTHDAY=20', # First January 20 following a Presidential election
 
   # February
   'Groundhog Day'                   => 'RRULE:FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=2',  # February 2
@@ -124,8 +124,18 @@ my %holiday = (
 # Aliases
 
 $holiday{ 'Fourth of July' } = $holiday{ 'Independence Day' };
-$holiday{ 'Presidents Day' } = $holiday{ 'Washingtons Birthday' };
+$holiday{ 'Presidents Day' } = $holiday{ 'Washingtons Birthday (observed)' };
 $holiday{ 'Thanksgiving' }   = $holiday{ 'Thanksgiving Day' };
+
+=head2 known
+
+Returns a list of holiday names DateTime::Event::Holiday::US knows about.
+
+  @known = DateTime::Event::Holiday::US::known();
+
+=cut
+
+sub known { return sort keys %holiday }
 
 =head2 holiday
 
@@ -145,17 +155,18 @@ sub holiday {
   croak "Unknown holiday ($holiday)"
     unless exists $holiday{ $holiday };
 
-  return DateTime::Format::ICal->parse_recurrence( $holiday{ $holiday } );
+  return DateTime::Format::ICal->parse_recurrence( 'recurrence' => $holiday{ $holiday } );
 
 }
 
 =head2 holidays
 
-Returns a list of DateTime::Set::ICal objects for each holiday.
+Returns a hash reference of DateTime::Set::ICal objects for each holiday.
 
-  @holidays = DateTime::Event::Holiday::US::holidays( 'Thanksgiving', 'Black Friday' );
+  $holidays = DateTime::Event::Holiday::US::holidays( 'Thanksgiving', 'Black Friday' );
 
-@holidays would be a two element array each containing a DateTime::Set::ICal object.
+$holidays is a hash reference where the key is the name of the holiday and the
+value is the object.
 
 =cut
 
@@ -163,12 +174,12 @@ sub holidays {
 
   my @holidays = @_;
 
-  my @h;
+  my %h;
 
-  push @h, holiday( $_ )
+  $h{ $_} = holiday( $_ )
     for @holidays;
 
-  return @h;
+  return \%h;
 
 }
 
@@ -178,34 +189,21 @@ Returns requested holidays as a single DateTime::Set object;
 
   $holidays = DateTime::Event::Holiday::US::holidays_as_set( 'Thanksgiving', 'Black Friday' );
 
-$holidays would be a DateTime::Set with both Thanksgiving and Black Friday
+$holidays would be a DateTime::Set containing sets for both Thanksgiving and Black Friday
 
 =cut
 
 sub holidays_as_set {
 
-  my @holidays = @_;
+  my @holidays = values %{ holidays( @_ ) };
 
-  my @h_objects = holidays( @holidays );
+  my $set = shift @holidays;
 
-  my $set = DateTime::Set->empty_set;
-
-  $set->union( $_ )
-    for @h_objects;
+  $set = $set->union( $_ ) for @holidays;
 
   return $set;
 
 }
-
-=head2 known
-
-Returns a list of holiday names DateTime::Event::Holiday::US knows about.
-
-  @known = DateTime::Event::Holiday::US::known();
-
-=cut
-
-sub known { return keys %holiday }
 
 };
 

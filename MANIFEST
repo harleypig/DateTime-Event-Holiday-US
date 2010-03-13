@@ -3,7 +3,7 @@ Changes
 MANIFEST
 README
 lib/DateTime/Event/Holiday/US.pm
-t/00-load.t
+t/00-basic.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
