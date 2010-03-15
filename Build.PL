@@ -8,6 +8,9 @@ my $builder = Module::Build->new(
     dist_author         => q{Alan Young <alansyoungiii@gmail.com>},
     dist_version_from   => 'lib/DateTime/Event/Holiday/US.pm',
     build_requires => {
+        'Carp' => 0,
+        'DateTime::Format::ICal' => 0,
+        'DateTime::Set' => 0,
         'Test::More' => 0,
     },
     add_to_cleanup      => [ 'DateTime-Event-Holiday-US-*' ],
