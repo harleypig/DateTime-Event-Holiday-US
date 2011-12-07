@@ -13,11 +13,11 @@ DateTime::Event::Holiday::US - US Holiday's as DateTime::Set objects
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -29,7 +29,7 @@ DateTime::Event::Recurrence) that you can use as a US holiday.
 
   my $thanksgiving = DateTime::Event::Holiday::US::holiday( 'Thanksgiving' );
   ...
-  my @holidays = DateTime::Event::Holdiay::US::known();
+  my @holidays = DateTime::Event::Holiday::US::known();
   ...
 
 $thanksgiving will be a DateTime::Set::ICal object that you can perform
