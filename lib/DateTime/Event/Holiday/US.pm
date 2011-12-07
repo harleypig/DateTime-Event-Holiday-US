@@ -22,21 +22,19 @@ our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
-This module handles creating a DateTime::Set::ICal object (see
-DateTime::Event::Recurrence) that you can use as a US holiday.
+# This module handles creating a DateTime::Set::ICal object (see
+# DateTime::Event::Recurrence) that you can use as a US holiday.
 
   use DateTime::Event::Holiday::US;
 
   my $thanksgiving = DateTime::Event::Holiday::US::holiday( 'Thanksgiving' );
-  ...
   my @holidays = DateTime::Event::Holiday::US::known();
-  ...
 
-$thanksgiving will be a DateTime::Set::ICal object that you can perform
-anything you would do with a DateTime::Set object.
+# $thanksgiving will be a DateTime::Set::ICal object that you can perform
+# anything you would do with a DateTime::Set object.
 
-$holidays will be an array of all holiday names DateTime::Event::Holiday::US
-knows about.
+# $holidays will be an array of all holiday names DateTime::Event::Holiday::US
+# knows about.
 
 =head1 EXPORT
 
