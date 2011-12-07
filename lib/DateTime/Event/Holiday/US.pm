@@ -135,7 +135,7 @@ Returns a list of holiday names DateTime::Event::Holiday::US knows about.
 
 =cut
 
-sub known { return sort keys %holiday }
+sub known { my @keys = sort keys %holiday ; return wantarray ? @keys : \@keys }
 
 =head2 holiday
 
